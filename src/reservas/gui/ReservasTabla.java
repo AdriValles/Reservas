@@ -128,7 +128,7 @@ public class ReservasTabla extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cargarReservas() {
+    public void cargarReservas() {
         // Suponemos que LogicaReservas tiene un método getReservas que retorna una lista de objetos Reserva
         for (Reserva reserva : LogicaReservas.getListaReservas()) {
             dtm.addRow(new Object[]{reserva.getTitulo(), reserva.getAutor(), reserva.getAnoPubli(), reserva.getEditorial()});
