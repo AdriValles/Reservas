@@ -129,7 +129,8 @@ public class ReservasTabla extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void cargarReservas() {
-        // Suponemos que LogicaReservas tiene un método getReservas que retorna una lista de objetos Reserva
+       
+        dtm.setRowCount(0);
         for (Reserva reserva : LogicaReservas.getListaReservas()) {
             dtm.addRow(new Object[]{reserva.getTitulo(), reserva.getAutor(), reserva.getAnoPubli(), reserva.getEditorial()});
         }
@@ -152,10 +153,11 @@ public class ReservasTabla extends javax.swing.JFrame {
             return;
         } else {
             int seleccion = jTableReservas.convertRowIndexToModel(jTableReservas.getSelectedRow());
+            LogicaReservas.getListaReservas().remove(seleccion);
         dtm.removeRow(seleccion);
         jTableReservas.setModel(dtm);
         }
-        
+        actualizarBotones();
     }//GEN-LAST:event_jButtonEliminarActionPerformed
 
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
