@@ -4,7 +4,9 @@
  */
 package reservas.gui;
 
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import reservas.dto.Reserva;
@@ -18,27 +20,29 @@ public class ReservasTabla extends javax.swing.JFrame {
 
     DefaultTableModel dtm = new DefaultTableModel();
     TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(dtm);
+
     /**
      * Creates new form ReservasTabla
      */
     public ReservasTabla() {
         initComponents();
         actualizarCampos();
-        
+
     }
-    
-    private void actualizarCampos(){
-        
+
+    private void actualizarCampos() {
+
         jTableReservas.setRowSorter(sorter);
-        dtm.setColumnIdentifiers(new Object[] {"Titulo", "Autor", "Año de publicación","Editorial"});
+        dtm.setColumnIdentifiers(new Object[]{"Titulo", "Autor", "Año de publicacion", "Editorial"});
         jTableReservas.setModel(dtm);
         actualizarBotones();
     }
+
     private void actualizarBotones() {
-        
+
         boolean hayFilas = dtm.getRowCount() > 0;
         jButtonEliminar.setEnabled(hayFilas);
-        jButtonFiltrar.setEnabled(hayFilas); 
+        jButtonFiltrar.setEnabled(hayFilas);
     }
 
     /**
@@ -55,6 +59,8 @@ public class ReservasTabla extends javax.swing.JFrame {
         jButtonNuevaReserva = new javax.swing.JButton();
         jButtonEliminar = new javax.swing.JButton();
         jButtonFiltrar = new javax.swing.JButton();
+        jComboBoxFiltro = new javax.swing.JComboBox<>();
+        jTextFieldFiltro = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -92,6 +98,8 @@ public class ReservasTabla extends javax.swing.JFrame {
             }
         });
 
+        jComboBoxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Titulo", "Autor", "Año de publicacion", "Editorial" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -99,17 +107,17 @@ public class ReservasTabla extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonNuevaReserva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPaneReservas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jComboBoxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonNuevaReserva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPaneReservas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(384, 384, 384)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonFiltrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(27, 27, 27))))
+                            .addComponent(jButtonEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonFiltrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -121,7 +129,10 @@ public class ReservasTabla extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButtonFiltrar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonFiltrar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(jComboBoxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25))
         );
 
@@ -129,39 +140,41 @@ public class ReservasTabla extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void cargarReservas() {
-       
+
         dtm.setRowCount(0);
         for (Reserva reserva : LogicaReservas.getListaReservas()) {
             dtm.addRow(new Object[]{reserva.getTitulo(), reserva.getAutor(), reserva.getAnoPubli(), reserva.getEditorial()});
         }
         actualizarBotones();
     }
-    
+
     private void jButtonNuevaReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevaReservaActionPerformed
         // TODO add your handling code here:
         Formulario form = new Formulario(this, true);
         form.setVisible(true);
         cargarReservas();
-        
+
     }//GEN-LAST:event_jButtonNuevaReservaActionPerformed
 
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
         // TODO add your handling code here:
         int respuestaEliminacion = JOptionPane.showConfirmDialog(this, "¿Esta seguro de que quiere eliminar esta reserva?", "Confirmación", JOptionPane.YES_NO_OPTION);
-        
+
         if (respuestaEliminacion != JOptionPane.YES_OPTION) {
             return;
         } else {
             int seleccion = jTableReservas.convertRowIndexToModel(jTableReservas.getSelectedRow());
             LogicaReservas.getListaReservas().remove(seleccion);
-        dtm.removeRow(seleccion);
-        jTableReservas.setModel(dtm);
+            dtm.removeRow(seleccion);
+            jTableReservas.setModel(dtm);
         }
         actualizarBotones();
     }//GEN-LAST:event_jButtonEliminarActionPerformed
 
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
         // TODO add your handling code here:
+        RowFilter<DefaultTableModel,Integer> rf = RowFilter.regexFilter(jTextFieldFiltro.getText(), jComboBoxFiltro.getSelectedIndex());
+        sorter.setRowFilter(rf);
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
     /**
@@ -203,7 +216,9 @@ public class ReservasTabla extends javax.swing.JFrame {
     private javax.swing.JButton jButtonEliminar;
     private javax.swing.JButton jButtonFiltrar;
     private javax.swing.JButton jButtonNuevaReserva;
+    private javax.swing.JComboBox<String> jComboBoxFiltro;
     private javax.swing.JScrollPane jScrollPaneReservas;
     private javax.swing.JTable jTableReservas;
+    private javax.swing.JTextField jTextFieldFiltro;
     // End of variables declaration//GEN-END:variables
 }
